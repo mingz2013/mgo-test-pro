@@ -1,8 +1,12 @@
 package dao
 
 import (
+	"fmt"
 	"github.com/mingz2013/mgo-test-pro/datastore"
 	"gopkg.in/mgo.v2"
+	"k8s.io/apimachinery/pkg/util/rand"
+	"os"
+	"strconv"
 )
 
 /*
@@ -61,9 +65,9 @@ type UserData struct {
 	OriginSharerInfo   objectType `json:"originSharerInfo" bson:"originSharerInfo"`
 }
 
-func NewUserData(index int) (data *dao.UserData) {
+func NewUserData(index int) (data *UserData) {
 
-	data = &dao.UserData{}
+	data = &UserData{}
 
 	startUserId := 10000
 	var err error
