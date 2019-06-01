@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"github.com/mingz2013/mgo_test/datastore"
+	"github.com/mingz2013/mgo-test-pro/datastore"
 	"gopkg.in/mgo.v2"
 )
 

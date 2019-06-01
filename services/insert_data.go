@@ -2,7 +2,7 @@ package services
 
 import (
 	"fmt"
-	"github.com/mingz2013/mgo_test/dao"
+	"github.com/mingz2013/mgo-test-pro/dao"
 	"log"
 	"os"
 	"strconv"
@@ -57,12 +57,12 @@ func NewUserData(index int) (data *dao.UserData) {
 
 var userDataC *dao.UserDataC
 
-func init() {
-	//userDataC = dao.NewUserDataC()
-}
+//func init() {
+//	//userDataC = dao.NewUserDataC()
+//}
 
 func InsertUserData(waitGroup *sync.WaitGroup, tokens chan<- int, index int) {
-	//log.Println("InsertUserData..")
+	log.Println("InsertUserData..")
 
 	defer waitGroup.Done()
 
@@ -95,8 +95,8 @@ func InsertUserData(waitGroup *sync.WaitGroup, tokens chan<- int, index int) {
 }
 
 func InsertAllUserData(count int, concurrentCount int) {
-	fmt.Println("InsertAllUserData...", count, concurrentCount)
-	log.Println("InsertAllUserData....")
+	//fmt.Println("InsertAllUserData...", count, concurrentCount)
+	//log.Println("InsertAllUserData....")
 
 	tokens := make(chan int, concurrentCount+10)
 
@@ -104,7 +104,7 @@ func InsertAllUserData(count int, concurrentCount int) {
 		tokens <- 1
 	}
 
-	fmt.Println("tokens: ", tokens)
+	//fmt.Println("tokens: ", tokens)
 
 	var waitGroup sync.WaitGroup
 
@@ -121,6 +121,10 @@ func InsertAllUserData(count int, concurrentCount int) {
 			go InsertUserData(&waitGroup, tokens, i)
 
 			i++
+
+			if i >= count {
+				break
+			}
 
 			continue
 

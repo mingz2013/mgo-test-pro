@@ -3,6 +3,7 @@ package datastore
 import (
 	"fmt"
 	"gopkg.in/mgo.v2"
+	"log"
 	"os"
 )
 
@@ -59,12 +60,13 @@ func HandlerCollection(dbName, colName string, query dbCollection) error {
 const defaultDBHost = "127.0.0.1:27017"
 
 func init() {
-
+	log.Println("init....datastore...")
 	host := os.Getenv("DB_HOST")
 	if host == "" {
 		host = defaultDBHost
 	}
 
+	log.Println("host", host)
 	InitSession(host)
 }
 

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/mingz2013/mgo_test/services"
+	"github.com/mingz2013/mgo-test-pro/services"
 	"log"
 	"os"
 	"strconv"
@@ -39,5 +39,8 @@ func main() {
 		}
 	}
 
+	log.Println(count, concurrentCount)
+
+	//
 	services.InsertAllUserData(count, concurrentCount)
 }
