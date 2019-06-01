@@ -37,7 +37,7 @@ import (
 type objectType map[string]interface{}
 
 type UserData struct {
-	UserId             string     `json:"_id" bson:"_id"`
+	UserId             int        `json:"_id" bson:"_id"`
 	SToken             string     `json:"stoken" bson:"stoken"`
 	ServerId           int        `json:"serverId" bson:"serverId"`
 	McExpireAt         string     `json:"mcExpireAt" bson:"mcExpireAt"`
@@ -53,12 +53,58 @@ type UserData struct {
 	VipExp             int        `json:"vipExp" bson:"vipExp"`
 	VipLevel           int        `json:"vipLevel" bson:"vipLevel"`
 	FightPower         int        `json:"fightPower" bson:"fightPower"`
-	ActiveTimestamp    string     `json:"activeTimestamp" bson:"activeTimestamp"`
-	Achievement        string     `json:"achievement" bson:"achievement"`
+	ActiveTimestamp    int        `json:"activeTimestamp" bson:"activeTimestamp"`
+	Achievement        int        `json:"achievement" bson:"achievement"`
 	Merit              string     `json:"merit" bson:"merit"`
 	MilitaryRank       string     `json:"militaryRank" bson:"militaryRank"`
 	Package            objectType `json:"package" bson:"package"`
 	OriginSharerInfo   objectType `json:"originSharerInfo" bson:"originSharerInfo"`
+}
+
+func NewUserData(index int) (data *dao.UserData) {
+
+	data = &dao.UserData{}
+
+	startUserId := 10000
+	var err error
+	s := os.Getenv("START_USER_ID")
+	if s != "" {
+		startUserId, err = strconv.Atoi(s)
+		if err != nil {
+			fmt.Println("error START_USER_ID", err)
+		}
+	}
+
+	//data.UserId = string(datastore.GetKeyId())
+	data.UserId = index + startUserId
+	data.Achievement = rand.Intn(999999)
+	data.ActiveTimestamp = 1559364073
+	data.EnterGameAt = ""
+	data.Exp = rand.Intn(999999)
+	data.FightPower = rand.Intn(999999)
+	data.Level = rand.Intn(999999)
+	data.McDailyRewardAtDay = ""
+	data.McExpireAt = ""
+	data.WcExpireNotice = false
+	data.FightPower = rand.Intn(999999)
+	data.Merit = ""
+	data.MilitaryRank = ""
+	data.Newbie = map[string]interface{}{
+		"currProgress": "GuideEnd",
+		"doneList":     []string{"GuidePubNormal", "GuideEnd", "GuideEquipmentUP", "GuideEnd", "GuideStory", "GuideEnd", "GuideFuseHero", "GuideEnd", "GuideLord", "GuideEnd", "GuideFigtingFailure"},
+	}
+	data.OfflineAt = ""
+	data.OnlineAt = ""
+	data.Package = map[string]interface{}{
+		"aaa": "aaa",
+	}
+
+	data.ServerId = rand.Intn(999999)
+	data.SToken = "aaaaaaaaaa"
+	data.VipLevel = rand.Intn(999999)
+	data.VipExp = rand.Intn(999999)
+
+	return
 }
 
 const DB_NAME = "idlethree"

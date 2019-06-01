@@ -37,6 +37,7 @@ func InitSession(host string) {
 
 	if err != nil {
 		fmt.Println(err)
+		log.Fatal("err session init..", err)
 	} else {
 		fmt.Println("mongo init....")
 	}

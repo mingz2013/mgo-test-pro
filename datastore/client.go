@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gomodule/redigo/redis"
+	"log"
 	"time"
 )
 
@@ -29,7 +30,7 @@ func (c *RedisClient) Init(conf string) {
 
 	if err != nil {
 		fmt.Println(err)
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 

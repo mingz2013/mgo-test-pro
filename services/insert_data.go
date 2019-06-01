@@ -4,56 +4,9 @@ import (
 	"fmt"
 	"github.com/mingz2013/mgo-test-pro/dao"
 	"log"
-	"os"
-	"strconv"
 	"sync"
 	"time"
 )
-
-func NewUserData(index int) (data *dao.UserData) {
-
-	data = &dao.UserData{}
-
-	startUserId := 10000
-	var err error
-	s := os.Getenv("START_USER_ID")
-	if s != "" {
-		startUserId, err = strconv.Atoi(s)
-		if err != nil {
-			fmt.Println("error START_USER_ID", err)
-		}
-	}
-
-	//data.UserId = string(datastore.GetKeyId())
-	data.UserId = strconv.Itoa(index + startUserId)
-	data.Achievement = ""
-	data.ActiveTimestamp = ""
-	data.EnterGameAt = ""
-	data.Exp = 10
-	data.FightPower = 10
-	data.Level = 10
-	data.McDailyRewardAtDay = ""
-	data.McExpireAt = ""
-	data.WcExpireNotice = false
-	data.FightPower = 1
-	data.Merit = ""
-	data.MilitaryRank = ""
-	data.Newbie = map[string]interface{}{
-		"aaa": "aaa",
-	}
-	data.OfflineAt = ""
-	data.OnlineAt = ""
-	data.Package = map[string]interface{}{
-		"aaa": "aaa",
-	}
-
-	data.ServerId = 1
-	data.SToken = "aaaaaaaaaa"
-	data.VipLevel = 1
-	data.VipExp = 1
-
-	return
-}
 
 var userDataC *dao.UserDataC
 
@@ -66,7 +19,7 @@ func InsertUserData(waitGroup *sync.WaitGroup, tokens chan<- int, index int) {
 
 	defer waitGroup.Done()
 
-	data := NewUserData(index)
+	data := dao.NewUserData(index)
 
 	startTime := time.Now()
 
