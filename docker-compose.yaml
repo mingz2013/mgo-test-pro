@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+
+  mongo:
+    image: mongo:latest
+    ports:
+    - "27017:27017"
+    restart: always
+    volumes:
+    - /Users/zhaojm/tmp/data:/data
+
+  #  redis:
+  #    image: redis:latest
+  #    ports:
+  #    - "6379:6379"
+  #    restart: always
+  #    volumes:
+  #    - /Users/zhaojm/tmp/data:/data
+
+
+  insert_data:
+    build: ./build/insert_data
+    #    ports:
+    #    - 50053:50053
+    links:
+    #    - redis
+    - mongo
+    environment:
+      DB_HOST: "mongo:27017"
+
+#      REDIS_HOST: "redis"
+#      REDIS_PORT: "6379"
+
+#      MICRO_ADDRESS: ":50053"
+
+
+
+

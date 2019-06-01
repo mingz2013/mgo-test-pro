@@ -1,0 +1,1 @@
+START_USER_ID=30000 INSERT_COUNT=10000 CONCURRENT_COUNT=1000 go run cmd/insert_data/main.go | >> 1.log  
