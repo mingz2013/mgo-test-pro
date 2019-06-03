@@ -36,4 +36,19 @@ services:
 
 
 
+  test_concurrent:
+    build: ./build/test_concurrent
+    #    ports:
+    #    - 50053:50053
+    links:
+    #    - redis
+    - mongo
+    environment:
+      DB_HOST: "mongo:27017"
+
+#      REDIS_HOST: "redis"
+#      REDIS_PORT: "6379"
+
+#      MICRO_ADDRESS: ":50053"
+
 
