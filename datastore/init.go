@@ -5,6 +5,7 @@ import (
 	"gopkg.in/mgo.v2"
 	"log"
 	"os"
+	"strings"
 )
 
 var MgoSession *mgo.Session
@@ -21,14 +22,17 @@ var MgoSession *mgo.Session
 //
 //}
 
-func InitSession(host string) {
+func InitSession(host string, username, password string) {
+
+	addrs := strings.Split(host, ",")
+
 	dialInfo := &mgo.DialInfo{
-		Addrs:     []string{host},
+		Addrs:     addrs,
 		Direct:    false,
 		PoolLimit: 4096,
 		Database:  "idlethree",
-		Username:  "",
-		Password:  "",
+		Username:  username,
+		Password:  password,
 	}
 
 	var err error
@@ -66,9 +70,17 @@ func init() {
 	if host == "" {
 		host = defaultDBHost
 	}
+	username := os.Getenv("USERNAME")
+	if host == "" {
+		username = ""
+	}
+	password := os.Getenv("PASSWORD")
+	if host == "" {
+		host = ""
+	}
 
-	log.Println("host", host)
-	InitSession(host)
+	log.Println("host", host, "username", username, "password", password)
+	InitSession(host, username, password)
 }
 
 //var redisClient *RedisClient

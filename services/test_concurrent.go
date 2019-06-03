@@ -21,7 +21,8 @@ func FindUserData(waitGroup *sync.WaitGroup, tokens chan<- int, userId int) {
 
 		interval := endTime.Sub(startTime)
 
-		fmt.Println("interval: ", interval)
+		fmt.Println("interval: ", interval, int(interval))
+		log.Println("log interval: ", interval, int(interval))
 
 		tokens <- 1
 	}()
