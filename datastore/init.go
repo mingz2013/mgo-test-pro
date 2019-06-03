@@ -26,7 +26,7 @@ func InitSession(host string) {
 		Addrs:     []string{host},
 		Direct:    false,
 		PoolLimit: 4096,
-		Database:  "test",
+		Database:  "idlethree",
 		Username:  "",
 		Password:  "",
 	}

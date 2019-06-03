@@ -166,6 +166,8 @@ func (c *UserDataC) Insert(data *UserData) error {
 func (c *UserDataC) FindByUserId(userId int) (data *UserData, err error) {
 	//err = c.collection().FindId(userId).One(data)
 
+	data = NewUserData(1)
+
 	query := func(c *mgo.Collection) error {
 		return c.FindId(userId).One(data)
 	}
