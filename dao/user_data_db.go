@@ -111,8 +111,25 @@ func NewUserData(index int) (data *UserData) {
 	return
 }
 
-const DB_NAME = "idlethree"
-const USER_DATA_DB_NAME = "user_data"
+var DB_NAME, USER_DATA_COLLECTION_NAME string
+
+func init() {
+	DB_NAME = "idlethree"
+	USER_DATA_COLLECTION_NAME = "user_data"
+
+	s := os.Getenv("DB_NAME")
+	if s == "" {
+	} else {
+		DB_NAME = s
+	}
+
+	s = os.Getenv("USER_DATA_COLLECTION_NAME")
+	if s == "" {
+	} else {
+		USER_DATA_COLLECTION_NAME = s
+	}
+
+}
 
 type UserDataC struct {
 	//session *mgo.Session
@@ -143,7 +160,7 @@ func (c *UserDataC) Insert(data *UserData) error {
 		return c.Insert(data)
 	}
 
-	return datastore.HandlerCollection(DB_NAME, USER_DATA_DB_NAME, query)
+	return datastore.HandlerCollection(DB_NAME, USER_DATA_COLLECTION_NAME, query)
 }
 
 func (c *UserDataC) FindByUserId(userId int) (data *UserData, err error) {
@@ -152,6 +169,6 @@ func (c *UserDataC) FindByUserId(userId int) (data *UserData, err error) {
 	query := func(c *mgo.Collection) error {
 		return c.FindId(userId).One(data)
 	}
-	err = datastore.HandlerCollection(DB_NAME, USER_DATA_DB_NAME, query)
+	err = datastore.HandlerCollection(DB_NAME, USER_DATA_COLLECTION_NAME, query)
 	return
 }

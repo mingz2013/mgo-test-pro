@@ -9,7 +9,7 @@ import (
 )
 
 const defaultCount = 10
-const defaultConcurrentCount = 10
+const defaultConcurrentCount = 1
 
 func main() {
 
