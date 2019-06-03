@@ -5,6 +5,7 @@ import (
 	"github.com/mingz2013/mgo-test-pro/services"
 	"log"
 	"os"
+	"runtime"
 	"strconv"
 )
 
@@ -12,6 +13,8 @@ const defaultCount = 10
 const defaultConcurrentCount = 1
 
 func main() {
+
+	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	fmt.Println("main...")
 	log.Println("main....")
