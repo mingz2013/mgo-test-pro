@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"github.com/mingz2013/mgo-test-pro/datastore"
 	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 	"k8s.io/apimachinery/pkg/util/rand"
 	"os"
 	"strconv"
+	"time"
 )
 
 /*
@@ -63,6 +65,54 @@ type UserData struct {
 	MilitaryRank       string     `json:"militaryRank" bson:"militaryRank"`
 	Package            objectType `json:"package" bson:"package"`
 	OriginSharerInfo   objectType `json:"originSharerInfo" bson:"originSharerInfo"`
+	TestData           objectType `json:"testData" bson:"testData"`
+}
+
+type FindData struct {
+	SToken             string     `json:"stoken" bson:"stoken"`
+	ServerId           int        `json:"serverId" bson:"serverId"`
+	McExpireAt         string     `json:"mcExpireAt" bson:"mcExpireAt"`
+	McDailyRewardAtDay string     `json:"mcDailyRewardAtDay" bson:"mcDailyRewardAtDay"`
+	WcExpireAt         string     `json:"wcExpireAt" bson:"wcExpireAt"`
+	WcExpireNotice     bool       `json:"wcExpireNotice" bson:"wcExpireNotice"`
+	Newbie             objectType `json:"newbie" bson:"newbie"`
+	EnterGameAt        string     `json:"enterGameAt" bson:"enterGameAt"`
+	OnlineAt           string     `json:"onlineAt" bson:"onlineAt"`
+	OfflineAt          string     `json:"offlineAt" bson:"offlineAt"`
+	Exp                int        `json:"exp" bson:"exp"`
+	Level              int        `json:"level" bson:"level"`
+	VipExp             int        `json:"vipExp" bson:"vipExp"`
+	VipLevel           int        `json:"vipLevel" bson:"vipLevel"`
+	FightPower         int        `json:"fightPower" bson:"fightPower"`
+	ActiveTimestamp    int        `json:"activeTimestamp" bson:"activeTimestamp"`
+	Achievement        int        `json:"achievement" bson:"achievement"`
+	Merit              string     `json:"merit" bson:"merit"`
+}
+
+func GetRandomString(l int) string {
+	str := "0123456789abcdefghijklmnopqrstuvwxyz"
+	bytes := []byte(str)
+	result := []byte{}
+	//r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	rand.Seed(time.Now().UnixNano())
+	for i := 0; i < l; i++ {
+		result = append(result, bytes[rand.Intn(len(bytes))])
+	}
+	return string(result)
+}
+
+func RandString() string {
+	return GetRandomString(rand.IntnRange(1, 50))
+}
+
+func RandSlice() (l []string) {
+	num := rand.IntnRange(1, 20)
+
+	for i := 0; i < num; i++ {
+		l = append(l, RandString())
+	}
+
+	return
 }
 
 func NewUserData(index int) (data *UserData) {
@@ -107,6 +157,26 @@ func NewUserData(index int) (data *UserData) {
 	data.SToken = "aaaaaaaaaa"
 	data.VipLevel = rand.Intn(999999)
 	data.VipExp = rand.Intn(999999)
+
+	data.TestData = map[string]interface{}{
+		"testList": RandSlice(),
+		"hahaha":   RandSlice(),
+	}
+
+	num := rand.Intn(100)
+	for i := 0; i < num; i++ {
+		data.TestData[RandString()] = RandSlice()
+	}
+
+	num = rand.Intn(100)
+	for i := 0; i < num; i++ {
+		data.Package[RandString()] = RandSlice()
+	}
+
+	num = rand.Intn(100)
+	for i := 0; i < num; i++ {
+		data.Newbie[RandString()] = RandSlice()
+	}
 
 	return
 }
@@ -163,14 +233,27 @@ func (c *UserDataC) Insert(data *UserData) error {
 	return datastore.HandlerCollection(DB_NAME, USER_DATA_COLLECTION_NAME, query)
 }
 
-func (c *UserDataC) FindByUserId(userId int) (data *UserData, err error) {
+func (c *UserDataC) FindByUserId(userId int) (data *FindData, err error) {
 	//err = c.collection().FindId(userId).One(data)
 
-	data = NewUserData(1)
+	data = &FindData{}
 
 	query := func(c *mgo.Collection) error {
 		return c.FindId(userId).One(data)
 	}
 	err = datastore.HandlerCollection(DB_NAME, USER_DATA_COLLECTION_NAME, query)
+	return
+}
+
+func (c *UserDataC) TestUpdate(userId int, data *UserData) (err error) {
+
+	//data := NewUserData(userId)
+
+	query := func(c *mgo.Collection) error {
+		_, err := c.Upsert(bson.M{"userId": userId}, data)
+		return err
+	}
+	err = datastore.HandlerCollection(DB_NAME, USER_DATA_COLLECTION_NAME, query)
+
 	return
 }

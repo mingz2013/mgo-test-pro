@@ -19,13 +19,13 @@ func main() {
 	var err error
 
 	count := defaultCount
-	s := os.Getenv("INSERT_COUNT")
+	s := os.Getenv("FIND_COUNT")
 	if s == "" {
 		count = defaultCount
 	} else {
 		count, err = strconv.Atoi(s)
 		if err != nil {
-			fmt.Println("error INSERT_COUNT", err)
+			fmt.Println("error FIND_COUNT", err)
 		}
 	}
 

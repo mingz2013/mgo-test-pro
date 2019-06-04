@@ -9,10 +9,25 @@ import (
 	"time"
 )
 
-func FindUserData(waitGroup *sync.WaitGroup, tokens chan<- int, userId int) {
+func RunOps(waitGroup *sync.WaitGroup, tokens chan<- int, userId int) {
 	defer waitGroup.Done()
 
+	rand.Seed(time.Now().UnixNano())
+
+	num := rand.Intn(4)
+
+	logStr := "Find"
+	if num == 1 {
+		logStr = "insert"
+	} else if num == 2 {
+		logStr = "update"
+	} else {
+		logStr = "Find"
+	}
+
 	c := dao.UserDataC{}
+
+	data := dao.NewUserData(userId)
 
 	startTime := time.Now()
 
@@ -21,17 +36,34 @@ func FindUserData(waitGroup *sync.WaitGroup, tokens chan<- int, userId int) {
 
 		interval := endTime.Sub(startTime)
 
-		fmt.Println("interval: ", interval, int(interval))
-		log.Println("log interval: ", interval, int(interval))
+		a := []interface{}{
+			logStr, " | ", interval, " | ", int(interval),
+		}
+
+		fmt.Println(a...)
+		log.Println(a...)
 
 		tokens <- 1
 	}()
 
-	_, err := c.FindByUserId(userId)
-	if err != nil {
-		fmt.Println(err)
-	}
+	//_, err := c.FindByUserId(userId)
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 	//fmt.Println(data)
+
+	if num == 1 {
+		data.UserId *= 3
+		c.Insert(data)
+	} else if num == 2 {
+		c.TestUpdate(userId, data)
+	} else {
+
+		_, err := c.FindByUserId(userId)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 
 }
 
@@ -62,7 +94,7 @@ func TestConcurrent(count int, concurrentCount int, maxUserId, minUserId int) {
 			findId := rand.IntnRange(minUserId, maxUserId)
 			fmt.Println("findId: ", findId)
 			log.Println("findId: ", findId)
-			go FindUserData(&waitGroup, tokens, findId)
+			go RunOps(&waitGroup, tokens, findId)
 
 			i++
 

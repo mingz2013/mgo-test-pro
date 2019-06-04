@@ -21,6 +21,13 @@ func InsertUserData(waitGroup *sync.WaitGroup, tokens chan<- int, index int) {
 
 	data := dao.NewUserData(index)
 
+	//c := dao.NewUserDataC()
+	//defer c.Close()
+
+	if userDataC == nil {
+		userDataC = dao.NewUserDataC()
+	}
+
 	startTime := time.Now()
 
 	defer func() {
@@ -28,17 +35,15 @@ func InsertUserData(waitGroup *sync.WaitGroup, tokens chan<- int, index int) {
 
 		interval := endTime.Sub(startTime)
 
-		fmt.Println("interval: ", interval, int(interval))
-		log.Println("log interval: ", interval, int(interval))
+		a := []interface{}{
+			"insert_data", " | ", interval, " | ", int(interval),
+		}
+
+		fmt.Println(a...)
+		log.Println(a...)
+
 		tokens <- 1
 	}()
-
-	//c := dao.NewUserDataC()
-	//defer c.Close()
-
-	if userDataC == nil {
-		userDataC = dao.NewUserDataC()
-	}
 
 	err := userDataC.Insert(data)
 	if err != nil {
