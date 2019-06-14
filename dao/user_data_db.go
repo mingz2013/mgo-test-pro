@@ -203,10 +203,13 @@ func init() {
 
 type UserDataC struct {
 	//session *mgo.Session
+	collectionIndex int
 }
 
-func NewUserDataC() *UserDataC {
-	c := &UserDataC{}
+func NewUserDataC(collectionIndex int) *UserDataC {
+	c := &UserDataC{
+		collectionIndex: collectionIndex,
+	}
 
 	//var err error
 	//c.session, err = datastore.CreateSession(host)
@@ -225,12 +228,20 @@ func NewUserDataC() *UserDataC {
 //	return c.session.DB(DB_NAME).C(USER_DATA_DB_NAME)
 //}
 
-func (c *UserDataC) Insert(data *UserData) error {
+func (c *UserDataC) DoQuery(query func(c *mgo.Collection) (err error)) (err error) {
+
+	name := USER_DATA_COLLECTION_NAME + "_" + string(c.collectionIndex)
+	err = datastore.HandlerCollection(DB_NAME, name, query)
+	return
+}
+
+func (c *UserDataC) Insert(data *UserData) (err error) {
 	query := func(c *mgo.Collection) error {
 		return c.Insert(data)
 	}
 
-	return datastore.HandlerCollection(DB_NAME, USER_DATA_COLLECTION_NAME, query)
+	err = c.DoQuery(query)
+	return
 }
 
 func (c *UserDataC) FindByUserId(userId int) (data *FindData, err error) {
@@ -241,7 +252,7 @@ func (c *UserDataC) FindByUserId(userId int) (data *FindData, err error) {
 	query := func(c *mgo.Collection) error {
 		return c.FindId(userId).One(data)
 	}
-	err = datastore.HandlerCollection(DB_NAME, USER_DATA_COLLECTION_NAME, query)
+	err = c.DoQuery(query)
 	return
 }
 
@@ -253,7 +264,7 @@ func (c *UserDataC) TestUpdate(userId int, data *UserData) (err error) {
 		_, err := c.Upsert(bson.M{"userId": userId}, data)
 		return err
 	}
-	err = datastore.HandlerCollection(DB_NAME, USER_DATA_COLLECTION_NAME, query)
+	err = c.DoQuery(query)
 
 	return
 }

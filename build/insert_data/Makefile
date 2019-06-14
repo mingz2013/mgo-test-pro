@@ -19,6 +19,7 @@ help:
 	@echo 'ENV:                                                                  '
 	@echo '   START_USER_ID             起始的userid， 整数，  默认值：10000                                         '
 	@echo '   INSERT_COUNT              插入的数据条数，整数，  默认值：10                                         '
+	@echo '   COLLECTION_COUNT          collection个数，整数，  默认值：1                                        '
 	@echo '   CONCURRENT_COUNT          并发数，       整数，  默认值：1                                         '
 	@echo '   DB_HOST                   数据库地址，    字符串，默认值：127.0.0.1:27017，多个地址请用逗号(,)分隔                                    '
 	@echo '   USERNAME                  数据库用户名，  字符串， 默认值：空                                         '
@@ -46,7 +47,7 @@ docker: build
 
 .PHONY: run
 run:
-	time START_USER_ID=10000 INSERT_COUNT=3000000 CONCURRENT_COUNT=4 DB_HOST=127.0.0.1:27017 DB_NAME=idlethree  USER_DATA_COLLECTION_NAME=user_data ./insert_data > 1.log
+	nohup time START_USER_ID=10000 INSERT_COUNT=3000000 COLLECTION_COUNT=1 CONCURRENT_COUNT=4 DB_HOST=127.0.0.1:27017 DB_NAME=idlethree  USER_DATA_COLLECTION_NAME=user_data ./insert_data > 1.log & > insert.log &
 
 
 .PHONY: run-docker

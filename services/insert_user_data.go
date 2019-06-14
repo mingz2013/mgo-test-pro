@@ -14,7 +14,7 @@ var userDataC *dao.UserDataC
 //	//userDataC = dao.NewUserDataC()
 //}
 
-func InsertUserData(waitGroup *sync.WaitGroup, tokens chan<- int, index int) {
+func InsertUserData(waitGroup *sync.WaitGroup, tokens chan<- int, index, collectionIndex int) {
 	//log.Println("InsertUserData..")
 
 	defer waitGroup.Done()
@@ -25,7 +25,7 @@ func InsertUserData(waitGroup *sync.WaitGroup, tokens chan<- int, index int) {
 	//defer c.Close()
 
 	if userDataC == nil {
-		userDataC = dao.NewUserDataC()
+		userDataC = dao.NewUserDataC(collectionIndex)
 	}
 
 	startTime := time.Now()
@@ -52,7 +52,15 @@ func InsertUserData(waitGroup *sync.WaitGroup, tokens chan<- int, index int) {
 
 }
 
-func InsertAllUserData(count int, concurrentCount int) {
+func getCollectionIndex(i, count, collectionCount int) (index int) {
+
+	sub := count / collectionCount
+
+	return i / sub
+
+}
+
+func InsertAllUserData(count int, concurrentCount, collectionCount int) {
 	//fmt.Println("InsertAllUserData...", count, concurrentCount)
 	log.Println("InsertAllUserData....")
 
@@ -78,7 +86,7 @@ func InsertAllUserData(count int, concurrentCount int) {
 		case <-tokens:
 			// 拿到一个token，
 			waitGroup.Add(1)
-			go InsertUserData(&waitGroup, tokens, i)
+			go InsertUserData(&waitGroup, tokens, i, getCollectionIndex(i, count, collectionCount))
 
 			i++
 

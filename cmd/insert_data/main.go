@@ -11,6 +11,7 @@ import (
 
 const defaultCount = 10
 const defaultConcurrentCount = 1
+const defaultCollectionCount = 1
 
 func main() {
 
@@ -44,6 +45,17 @@ func main() {
 
 	log.Println(count, concurrentCount)
 
+	collectionCount := defaultCollectionCount
+	s = os.Getenv("COLLECTION_COUNT")
+	if s == "" {
+		collectionCount = defaultCollectionCount
+	} else {
+		collectionCount, err = strconv.Atoi(s)
+		if err != nil {
+			fmt.Println("err COLLECTION_COUNT", err)
+		}
+	}
+
 	//
-	services.InsertAllUserData(count, concurrentCount)
+	services.InsertAllUserData(count, concurrentCount, collectionCount)
 }
