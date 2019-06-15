@@ -6,6 +6,7 @@ import (
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"k8s.io/apimachinery/pkg/util/rand"
+	"log"
 	"os"
 	"strconv"
 	"time"
@@ -230,7 +231,8 @@ func NewUserDataC(collectionIndex int) *UserDataC {
 
 func (c *UserDataC) DoQuery(query func(c *mgo.Collection) (err error)) (err error) {
 
-	name := USER_DATA_COLLECTION_NAME + "_" + string(c.collectionIndex)
+	name := USER_DATA_COLLECTION_NAME + "_" + strconv.Itoa(c.collectionIndex)
+	log.Println("name", name, "dbname", DB_NAME)
 	err = datastore.HandlerCollection(DB_NAME, name, query)
 	return
 }
