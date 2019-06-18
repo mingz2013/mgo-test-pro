@@ -159,25 +159,25 @@ func NewUserData(index int) (data *UserData) {
 	data.VipLevel = rand.Intn(999999)
 	data.VipExp = rand.Intn(999999)
 
-	data.TestData = map[string]interface{}{
-		"testList": RandSlice(),
-		"hahaha":   RandSlice(),
-	}
-
-	num := rand.Intn(100)
-	for i := 0; i < num; i++ {
-		data.TestData[RandString()] = RandSlice()
-	}
-
-	num = rand.Intn(100)
-	for i := 0; i < num; i++ {
-		data.Package[RandString()] = RandSlice()
-	}
-
-	num = rand.Intn(100)
-	for i := 0; i < num; i++ {
-		data.Newbie[RandString()] = RandSlice()
-	}
+	//data.TestData = map[string]interface{}{
+	//	"testList": RandSlice(),
+	//	"hahaha":   RandSlice(),
+	//}
+	//
+	//num := rand.Intn(100)
+	//for i := 0; i < num; i++ {
+	//	data.TestData[RandString()] = RandSlice()
+	//}
+	//
+	//num = rand.Intn(100)
+	//for i := 0; i < num; i++ {
+	//	data.Package[RandString()] = RandSlice()
+	//}
+	//
+	//num = rand.Intn(100)
+	//for i := 0; i < num; i++ {
+	//	data.Newbie[RandString()] = RandSlice()
+	//}
 
 	return
 }
