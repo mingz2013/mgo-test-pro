@@ -2,7 +2,7 @@ package dao
 
 import (
 	"fmt"
-	"github.com/mingz2013/mgo-test-pro/datastore"
+	"mgo-test-pro/datastore"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"k8s.io/apimachinery/pkg/util/rand"

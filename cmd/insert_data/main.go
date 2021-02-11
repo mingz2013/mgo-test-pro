@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/mingz2013/mgo-test-pro/services"
+	"mgo-test-pro/services"
 	"log"
 	"os"
 	"runtime"

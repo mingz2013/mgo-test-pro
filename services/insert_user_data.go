@@ -2,7 +2,7 @@ package services
 
 import (
 	"fmt"
-	"github.com/mingz2013/mgo-test-pro/dao"
+	"mgo-test-pro/dao"
 	"log"
 	"sync"
 	"time"
